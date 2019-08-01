@@ -1,8 +1,14 @@
 provider "google" {
-  project = "${var.project_name}"
-  region  = "${var.region_name}"
-  zone    = "${var.zone_name}"
+  credentials = "${file("terraform-practice-nlw-c5a6bc11462e.json")}"
+  project     = "${var.project_name}"
+  region      = "${var.region_name}"
+  zone        = "${var.zone_name}"
 }
+
+resource "google_compute_network" "vpc_network" {
+    name = "${var.instance_network}"
+      auto_create_subnetworks = "true"
+    }
 
 resource "google_compute_instance" "vm_instance" {
   name        = "${var.instance_name}"
@@ -15,13 +21,9 @@ resource "google_compute_instance" "vm_instance" {
   }
 
   network_interface {
-    network = "${google_compute_network.vpc_network.self_link}"
+    network = "${var.instance_network}"
       access_config {
     }
   }
 }
 
-resource "google_compute_network" "vpc_network" {
-  name = "${var.instance_network}"
-  auto_create_subnetworks = "true"
-}
