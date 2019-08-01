@@ -8,3 +8,21 @@ provider "google" {
 resource "google_compute_network" "vpc-network" {
     name = "${var.instance_network}"
 }
+
+resource "google_compute_instance" "default" {
+  name = "${var.instance_name}"
+  machine_type = "${var.machine_type}"
+    
+  boot_disk {
+      initialize_params {
+          image = "${var.instance_image}"
+        }
+    }
+  network_interface {
+      network = "${google_compute_network.vpc-network}"
+
+      access_config {
+          
+      }
+  }  
+}
